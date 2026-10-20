@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lutea — Find Your Sound</title>
+    <meta name="description" content="Lutea — a premium music player. Coming soon.">
+
+    <!-- Lenis smooth scroll -->
+    <link rel="stylesheet" href="https://unpkg.com/lenis@1.3.27/dist/lenis.css">
+    <script src="https://unpkg.com/lenis@1.3.27/dist/lenis.min.js"></script>
+
+    <!-- Google Fonts — Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #0a0a0a;
+            --text: #ffffff;
+            --text-dim: rgba(255, 255, 255, 0.5);
+            --text-faint: rgba(255, 255, 255, 0.15);
+            --accent: #80E5FF;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', -apple-system, sans-serif;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        html.lenis, html.lenis body { height: auto; }
+        .lenis.lenis-smooth { scroll-behavior: auto !important; }
+        .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+        .lenis.lenis-stopped { overflow: hidden; }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            text-align: center;
+            padding: 0 24px;
+        }
+
+        .hero-glow {
+            position: absolute;
+            top: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255,216,158,0.06) 0%, rgba(255,154,139,0.03) 40%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: breathe 4s ease-in-out infinite;
+        }
+
+        @keyframes breathe {
+            0%, 100% { opacity: 0.5; transform: translateX(-50%) scale(1); }
+            50% { opacity: 0.8; transform: translateX(-50%) scale(1.05); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            animation: fadeInUp 1.2s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 12vw, 8rem);
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            margin-bottom: 16px;
+            background: linear-gradient(180deg, #fff 0%, rgba(255,255,255,0.6) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-tagline {
+            font-size: clamp(1rem, 4vw, 1.5rem);
+            font-weight: 300;
+            color: var(--text-dim);
+            margin-bottom: 48px;
+        }
+
+        .coming-soon {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 28px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-dim);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .coming-soon .dot {
+            width: 8px; height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--text-faint);
+            font-size: 12px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(8px); }
+        }
+
+        .features {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 120px 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            text-align: center;
+            margin-bottom: 64px;
+            max-width: 600px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            width: 100%;
+        }
+
+        .feature-card {
+            padding: 32px 28px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 24px;
+            transition: all 0.4s ease;
+        }
+
+        .feature-card:hover {
+            background: rgba(255,255,255,0.04);
+            border-color: rgba(255,255,255,0.12);
+            transform: translateY(-4px);
+        }
+
+        .feature-icon {
+            width: 48px; height: 48px;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(128,229,255,0.08);
+            border-radius: 14px;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .feature-title { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+        .feature-desc { font-size: 14px; font-weight: 300; color: var(--text-dim); line-height: 1.6; }
+
+        .cta {
+            min-height: 60vh;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            text-align: center;
+            padding: 80px 24px;
+            position: relative;
+        }
+
+        .cta-bg {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(212,160,58,0.04) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta-title { font-size: clamp(2rem, 8vw, 4rem); font-weight: 700; margin-bottom: 16px; position: relative; z-index: 2; }
+        .cta-subtitle { font-size: clamp(1rem, 3vw, 1.25rem); font-weight: 300; color: var(--text-dim); margin-bottom: 40px; position: relative; z-index: 2; }
+
+        .cta-button {
+            display: inline-flex; align-items: center; gap: 10px;
+            padding: 16px 40px;
+            background: var(--text); color: var(--bg);
+            border: none; border-radius: 100px;
+            font-size: 16px; font-weight: 600; font-family: inherit;
+            cursor: pointer; transition: all 0.3s ease;
+            text-decoration: none;
+            position: relative; z-index: 2;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px rgba(255,255,255,0.1);
+        }
+
+        .footer {
+            padding: 40px 24px;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .footer-text { font-size: 13px; font-weight: 300; color: var(--text-faint); }
+        .footer-link { color: var(--text-dim); text-decoration: none; transition: color 0.3s; }
+        .footer-link:hover { color: var(--accent); }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        @media (max-width: 640px) {
+            .features { padding: 80px 20px; }
+            .feature-card { padding: 24px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero -->
+    <section class="hero" id="hero">
+        <div class="hero-glow"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">Lutea</h1>
+            <p class="hero-tagline">Find your sound.</p>
+            <div class="coming-soon">
+                <span class="dot"></span>
+                Coming Soon
+            </div>
+        </div>
+        <div class="scroll-hint">Scroll</div>
+    </section>
+
+    <!-- Features -->
+    <section class="features" id="features">
+        <div class="reveal">
+            <p class="section-label">Features</p>
+            <h2 class="section-title">Crafted for those who listen deeply.</h2>
+        </div>
+        <div class="feature-grid">
+            <div class="feature-card reveal">
+                <div class="feature-icon">✦</div>
+                <h3 class="feature-title">Cinematic Onboarding</h3>
+                <p class="feature-desc">Per-character blur reveal animations that feel like a camera focusing into focus.</p>
+            </div>
+            <div class="feature-card reveal">
+                <div class="feature-icon">◐</div>
+                <h3 class="feature-title">Liquid Glass UI</h3>
+                <p class="feature-desc">Kyant-powered frosted glass blur on every capsule and button. Premium feel.</p>
+            </div>
+            <div class="feature-card reveal">
+                <div class="feature-icon">♪</div>
+                <h3 class="feature-title">Quick Picks</h3>
+                <p class="feature-desc">Your music, organized. Recently played, made for you — all in one clean view.</p>
+            </div>
+            <div class="feature-card reveal">
+                <div class="feature-icon">❋</div>
+                <h3 class="feature-title">Living Background</h3>
+                <p class="feature-desc">A soft, breathing glow that pulses gently. The screen feels alive.</p>
+            </div>
+            <div class="feature-card reveal">
+                <div class="feature-icon">⚡</div>
+                <h3 class="feature-title">Offline First</h3>
+                <p class="feature-desc">No cloud, no account, no tracking. Your music stays on your device.</p>
+            </div>
+            <div class="feature-card reveal">
+                <div class="feature-icon">✧</div>
+                <h3 class="feature-title">Designed with Care</h3>
+                <p class="feature-desc">Every animation, every spacing, every color — carefully tuned.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta" id="cta">
+        <div class="cta-bg"></div>
+        <h2 class="cta-title">Coming Soon.</h2>
+        <p class="cta-subtitle">Lutea is being crafted with care. Stay tuned.</p>
+        <a href="https://github.com/rajatxo/Lutea" target="_blank" rel="noopener" class="cta-button">
+            Follow on GitHub →
+        </a>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p class="footer-text">
+            © 2026 Lutea · Crafted by
+            <a href="https://t.me/rajat_xo" target="_blank" rel="noopener" class="footer-link">Rajat</a>
+        </p>
+    </footer>
+
+    <!-- Lenis smooth scroll -->
+    <script>
+        new Lenis({
+            autoRaf: true,
+            autoToggle: true,
+            anchors: true,
+            allowNestedScroll: true,
+            naiveDimensions: true,
+            stopInertiaOnNavigate: true,
+        });
+    </script>
+
+    <!-- Scroll reveal -->
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.15 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+
+</body>
+</html>
